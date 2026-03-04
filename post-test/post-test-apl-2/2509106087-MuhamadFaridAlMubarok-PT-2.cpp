@@ -12,7 +12,17 @@ using namespace std;
 #define magenta "\033[35m"
 #define abu     "\033[90m"
 
-#define MAX_USER = 10
+const int MAX_USER = 100;
+
+struct User {
+    string username;
+    string password;
+    string role;
+};
+
+User daftarAkun[MAX_USER];
+int jumlahAkun = 0;
+
 
 int main() {
 
@@ -30,41 +40,93 @@ int main() {
 |  [3]. Keluar                                     |
 |                                                  |
 ====================================================
-    )";
+)";
     string judulRegistrasi = R"(
 ============================
 |                          |
 |      Nouveau compte      |
 |                          |
 ============================)";
+    string judulLogin = R"(
+=======================
+|                     |
+|      Connexion      |
+|                     |
+=======================)";
 
     do {
-
         system("cls");
         cout << judulAwal << endl;
         cout << "Masukkan Opsi: ";
         cin >> pilihan;
+        cin.ignore();
 
         if (pilihan == '1') {
-            cout << endl;
+
+            system("cls");
+            string usernameBenar, passwordBenar;
+
+            cout << judulLogin << endl;
+            cout << "\nMasukkan Username: ";
+            getline(cin, usernameBenar);
+            cout << "\nMasukkan Password: ";
+            getline(cin, passwordBenar);
+
         } else if (pilihan == '2') {
-            
+
+            if (jumlahAkun >= MAX_USER) {
+                cout << "Maaf, Kapasitas Pengguna Penuh" << endl;
+                cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
+                cin.ignore(10000, '\n');
+                cin.get();
+                continue;
+
+            } else {
+
             int percobaan = 0;
-            string usernameBaru, passwordBaru;
+            string usernameBaru, passwordBaru, roleBaru;
+            bool usernameAda = false;
 
-            while (percobaan < 3) {
+            system("cls");
+            cout << judulRegistrasi << endl;
+            cout << "\nMasukkan Username Baru: ";
+            getline(cin, usernameBaru);
 
-                cout << judulRegistrasi << endl;
-                cout << "Masukkan Username Baru: ";
-                getline(cin, usernameBaru);
-                cout << "Masukkan Password Baru: ";
-                getline(cin, passwordBaru);
+            for (int i = 0; i < jumlahAkun; i++) {
+                if (daftarAkun[i].username == usernameBaru) {
+                    usernameAda = true;
+                    break;
+                }
+            }
+
+            if (usernameAda) {
+                cout << "Username Sudah Dipakai. Silahkan Pake Username Lain" << endl;
+                cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
+                cin.ignore(10000, '\n');
+                cin.get();
+                continue;
+            }
+
+            cout << "Masukkan Password Baru: " << endl;
+            getline(cin, usernameBaru);
+            cout << "Masukkan Role Baru: " << endl;
+            getline(cin, roleBaru);
+
+            daftarAkun[jumlahAkun].username = usernameBaru;
+            daftarAkun[jumlahAkun].password = passwordBaru;
+            daftarAkun[jumlahAkun].role = roleBaru;
+            jumlahAkun++;
+    
+            cout << hijau << "Akun berhasil dibuat! Silakan login." << putih << endl;
+
+            cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
+            cin.get();
 
             }
         } else if (pilihan == '3') {
             
         }
-        } while (pilihan != '4');
+        } while (pilihan != '3');
 
     return 0;
 }
