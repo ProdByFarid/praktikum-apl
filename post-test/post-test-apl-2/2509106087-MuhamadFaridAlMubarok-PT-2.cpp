@@ -1,4 +1,6 @@
 #include <iostream>
+#include <iomanip>
+
 using namespace std;
 
 #define putih   "\033[0m"
@@ -74,7 +76,7 @@ int main() {
 
                 cout << "======================" << endl;
                 cout << "|                    |" << endl;
-                cout << "|     " << hijau << "Login Akun" << putih "     |" << endl;
+                cout << " |    " << hijau << "Login Akun" << putih "    |" << endl;
                 cout << "|                    |" << endl;
                 cout << "======================" << endl;
                 cout << "\nMasukkan Username: ";
@@ -90,7 +92,7 @@ int main() {
                         loginBerhasil = true;
                         cekRole = daftarAkun[i].role;
 
-                        cout << hijau << "[+] Login Berhasil!, Selamat Datang " << usernameLogin << '!' << putih << endl;
+                        cout << hijau << "\n[+] Login Berhasil!, Selamat Datang " << usernameLogin << '!' << putih << endl;
 
                         cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
                         cin.get();
@@ -104,14 +106,13 @@ int main() {
                     system("cls");
 
                     if (cekRole == "admin") {
-                        
                         char pilihanAdmin;
                         
                         do
                         {
                             cout << "======================================" << endl;
                             cout << "|                                    |" << endl;
-                            cout << "|             " << biru << "MENU ADMIN" << putih << "            |" << endl;
+                            cout << " |            " << biru << "MENU ADMIN" << putih << "            |" << endl;
                             cout << "|                                    |" << endl;
                             cout << "==-=-=-=-=-=-=--=--=--=-=-=-=-=-=-=-==" << endl;
                             cout << "| [1]. Tambahkan Data Lukisan        |" << endl;
@@ -124,13 +125,14 @@ int main() {
                             cin >> pilihanAdmin;
                             
                             if (pilihanAdmin == '1') {
-                                if (jumlahData < MAKS_DATA) {
+                                if (jumlahData == MAKS_DATA) {
                                     cout << merah << "[!] Kapasitas Data Sudah Penuh!" << putih << endl;
 
                                     cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
                                     cin.get();
+
                                 } else {
-                                    cout << "Judul Lukisan: ";
+                                    cout << "\nJudul Lukisan: ";
                                     cin.ignore();
                                     getline(cin, lukisan[jumlahData].judul);
 
@@ -148,6 +150,22 @@ int main() {
                                     
                                 }
                             } else if (pilihanAdmin == '2') {
+                                if (jumlahData == 0) {
+                                    cout << merah << "[!] Data Belum Ada" << putih << endl;
+
+                                    cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
+                                    cin.get();
+                                } else {
+                                        cout << "--------------------------------------------------------------------------------" << endl;
+                                        cout << "| " << setw(10) << left << "JUDUL" 
+                                            << "| " << setw(20) << left << "NAMA PELUKIS" 
+                                            << "| " << setw(15) << left << "TAHUN" 
+                                            << "| " << setw(5) << left << "STATUS" << " |" << endl;
+                                        cout << "--------------------------------------------------------------------------------" << endl;
+
+                                        cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
+                                        cin.get();
+                                }
                                 
                             }
                         } while (pilihanAdmin != 5);
