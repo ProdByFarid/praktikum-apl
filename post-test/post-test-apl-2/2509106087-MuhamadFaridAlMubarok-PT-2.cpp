@@ -142,7 +142,7 @@ int main() {
                             
                             if (pilihanAdmin == '1') {
                                 if (jumlahData == MAKS_DATA) {
-                                    cout << merah << "[!] Kapasitas Data Sudah Penuh!" << putih << endl;
+                                    cout << merah << "\n[!] Kapasitas Data Sudah Penuh!" << putih << endl;
 
                                     cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
                                     cin.get();
@@ -158,55 +158,113 @@ int main() {
                                     cout << "Status : ";
                                     getline(cin, lukisan[jumlahData].status);
                                     
+                                    jumlahData++;
+
+                                    cout << hijau << "\n[+] Data Berhasil Ditambahkan." << putih << endl ;
+                                    
+                                    cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
+                                    cin.get();
                                 }
                             } else if (pilihanAdmin == '2') {
                                 if (jumlahData == 0) {
-                                    cout << merah << "[!] Data Belum Ada." << putih << endl;
+                                    cout << merah << "[!] Belum Ada Data." << putih << endl;
 
                                     cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
                                     cin.get();
 
                                 } else {
-                                        system("cls");
-                                        cout << "--------------------------------------------------------------------------------------" << endl;
-                                        cout << "| " << cyan << setw(3) << left << "NO" << putih 
-                                                "| " << biru << setw(30) << left << "JUDUL" << putih 
-                                            << "| " << biru << setw(25) << left << "NAMA PELUKIS" << putih
-                                            << "| " << biru << setw(6) << left << "TAHUN" << putih
-                                            << "| " << emas << setw(10) << left << "STATUS" << putih << " |" << endl;
-                                        cout << "--------------------------------------------------------------------------------------" << endl;
+                                    system("cls");
+                                    cout << "======================================================================================" << endl;
+                                    cout << "| " << cyan << setw(3) << left << "NO" << putih 
+                                            "| " << biru << setw(30) << left << "JUDUL" << putih 
+                                        << "| " << biru << setw(25) << left << "NAMA PELUKIS" << putih
+                                        << "| " << biru << setw(6) << left << "TAHUN" << putih
+                                        << "| " << emas << setw(10) << left << "STATUS" << putih << " |" << endl;
+                                    cout << "======================================================================================" << endl;
 
-                                        for (int i = 0; i < jumlahData; i++) {
-                                        cout << "| " << setw(3) << left << i + 1
-                                            << "| " << setw(30) << left << lukisan[i].judul
-                                            << "| " << setw(25) << left << lukisan[i].namaPelukis 
-                                            << "| " << setw(6) << left << lukisan[i].tahun 
-                                            << "| " << setw(10) << lukisan[i].status << " |" << endl;
+                                    for (int i = 0; i < jumlahData; i++) {
+                                    cout << "| " << setw(3) << left << i + 1
+                                        << "| " << setw(30) << left << lukisan[i].judul
+                                        << "| " << setw(25) << left << lukisan[i].namaPelukis 
+                                        << "| " << setw(6) << left << lukisan[i].tahun 
+                                        << "| " << setw(10) << lukisan[i].status << " |" << endl;
                                     }
-                                        cout << "--------------------------------------------------------------------------------------" << endl;
+                                    cout << "======================================================================================" << endl;
+
+                                    cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
+                                    cin.ignore(10000, '\n');
+                                    cin.get();
+
+                                    system("cls");
+                                } 
+
+                            } else if (pilihanAdmin == '3') {
+
+                                int indeks;
+
+                                if (jumlahData == 0) {
+                                    cout << merah << "\n[!] Belum Ada Data." << putih << endl;
+
+                                    cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
+                                    cin.get();
+                                } else {
+                                    system("cls");
+                                    
+                                    cout << "======================================================================================" << endl;
+                                    cout << "| " << cyan << setw(3) << left << "NO" << putih 
+                                            "| " << biru << setw(30) << left << "JUDUL" << putih 
+                                        << "| " << biru << setw(25) << left << "NAMA PELUKIS" << putih
+                                        << "| " << biru << setw(6) << left << "TAHUN" << putih
+                                        << "| " << emas << setw(10) << left << "STATUS" << putih << " |" << endl;
+                                    cout << "======================================================================================" << endl;
+                                    for (int i = 0; i < jumlahData; i++) {
+                                    cout << "| " << setw(3) << left << i + 1
+                                        << "| " << setw(30) << left << lukisan[i].judul
+                                        << "| " << setw(25) << left << lukisan[i].namaPelukis 
+                                        << "| " << setw(6) << left << lukisan[i].tahun 
+                                        << "| " << setw(10) << lukisan[i].status << " |" << endl;
+                                    }
+                                    cout << "======================================================================================" << endl;
+
+                                    cout << "\nMasukkan Nomor Data Yang Ingin DiUpdate: ";
+                                    cin >> indeks;
+
+                                    cin.ignore(10000, '\n');
+
+                                    if (indeks > 0 && indeks <= jumlahData) {
+                                        cout << "Judul Lukisan (Baru): ";
+                                        getline(cin, lukisan[indeks - 1].judul);
+
+                                        cout << "Nama Pelukis (Baru): ";
+                                        getline(cin, lukisan[indeks - 1].namaPelukis);
+
+                                        cout << "Tahun Dibuat (Baru): ";
+                                        getline(cin, lukisan[indeks - 1].tahun);
+
+                                        cout << "Status (Baru): ";
+                                        getline(cin, lukisan[indeks - 1].status);
+
+                                        cout << hijau << "\n[+]Data Lukisan Berhasil Di-Update!" << putih << endl;
 
                                         cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
-                                        cin.ignore(10000, '\n');
                                         cin.get();
 
-                                        system("cls");
+                                    } else {
+                                        cout << merah << "\n[!] Error: Pilihan Data Tidak Valid!" << putih << endl;
 
+                                        cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
+                                        cin.get();
+                                        continue;
+                                    }
                                 }
-                                
                             }
+
                         } while (pilihanAdmin != '5');
                         
                     } else if (cekRole == "user") {
 
                         char pilihanUser;
 
-                        if (jumlahData == 0) {
-                            cout << merah << "[!] Data Belum Ada." << putih << endl;
-
-                            cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
-                            cin.get();
-
-                        } else {
                             do {
                                 system("cls");
                                 cout << "======================================" << endl;
@@ -222,65 +280,60 @@ int main() {
 
                                 if (pilihanUser == '1') {
                                     if (jumlahData == 0) {
-                                    cout << merah << "[!] Data Belum Ada." << putih << endl;
+                                    cout << merah << "\n[!] Data Belum Ada." << putih << endl;
 
                                     cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
                                     cin.get();
 
-                                } else {
-                                    system("cls");
-                                    cout << "--------------------------------------------------------------------------------------" << endl;
-                                    cout << "| " << cyan << setw(3) << left << "NO" << putih 
-                                            "| " << biru << setw(30) << left << "JUDUL" << putih 
-                                        << "| " << biru << setw(25) << left << "NAMA PELUKIS" << putih
-                                        << "| " << biru << setw(6) << left << "TAHUN" << putih
-                                        << "| " << emas << setw(10) << left << "STATUS" << putih << " |" << endl;
-                                    cout << "--------------------------------------------------------------------------------------" << endl;
+                                    } else {
+                                        system("cls");
+                                        cout << "--------------------------------------------------------------------------------------" << endl;
+                                        cout << "| " << cyan << setw(3) << left << "NO" << putih 
+                                                "| " << biru << setw(30) << left << "JUDUL" << putih 
+                                            << "| " << biru << setw(25) << left << "NAMA PELUKIS" << putih
+                                            << "| " << biru << setw(6) << left << "TAHUN" << putih
+                                            << "| " << emas << setw(10) << left << "STATUS" << putih << " |" << endl;
+                                        cout << "--------------------------------------------------------------------------------------" << endl;
 
-                                    for (int i = 0; i < jumlahData; i++) {
-                                    cout << "| " << setw(3) << left << i + 1
-                                        << "| " << setw(30) << left << lukisan[i].judul
-                                        << "| " << setw(25) << left << lukisan[i].namaPelukis 
-                                        << "| " << setw(6) << left << lukisan[i].tahun 
-                                        << "| " << setw(10) << lukisan[i].status << " |" << endl;
+                                        for (int i = 0; i < jumlahData; i++) {
+                                        cout << "| " << setw(3) << left << i + 1
+                                            << "| " << setw(30) << left << lukisan[i].judul
+                                            << "| " << setw(25) << left << lukisan[i].namaPelukis 
+                                            << "| " << setw(6) << left << lukisan[i].tahun 
+                                            << "| " << setw(10) << lukisan[i].status << " |" << endl;
+                                        }
+                                        cout << "--------------------------------------------------------------------------------------" << endl;
+
+                                        cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
+                                        cin.ignore(10000, '\n');
+                                        cin.get();
+
+                                        system("cls");
+
                                     }
-                                    cout << "--------------------------------------------------------------------------------------" << endl;
 
-                                    cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
-                                    cin.ignore(10000, '\n');
-                                    cin.get();
+                            } else if (pilihanUser == '2') {
+                                cout << merah << "\n[-] Anda Akan Keluar Dari Menu Ini." << putih << endl;
 
-                                    system("cls");
+                                cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
+                                cin.ignore(10000, '\n');
+                                cin.get();
 
-                                    }
+                                break;
+                            }
 
-                                } else if (pilihanUser == '2') {
-                                    cout << "\n[-] Anda Akan Keluar Dari Menu Ini." << endl;
-
-                                    cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
-                                    cin.ignore(10000, '\n');
-                                    cin.get();
-
-                                    break;
-                                }
-
-                            } while (pilihanUser != 2);
-                            
-                        }
-
+                        } while (pilihanUser != 2);
+                        
                     }
-                    cout << abu << "\n[Tekan Enter Untuk Kembali...]" << putih;
-                    cin.get();
-                    
-                    break;
+
                 } else {
                     if (percobaan == 3) {
-                        cout << merah << "[-] Login Gagal! Akses Ditolak!" << putih << endl;
+                        cout << merah << "\n[-] Login Gagal! Akses Ditolak!" << putih << endl;
                         cout << endl;
 
                         break;
                     } else {
-                        cout << merah << "[-] USername Atau Password! Silahkan Coba Lagi!" << putih << endl;
+                        cout << merah << "\n[-] Username Atau Password! Silahkan Coba Lagi!" << putih << endl;
                         percobaan++;
                         cout << "\nJumlah Percobaan: " << percobaan - 1 << endl;
                         
@@ -301,7 +354,7 @@ int main() {
                 bool cekUsername = false;
 
                 system("cls");
-                if (jumlahAkun >= MAKS_USER) {
+                if (jumlahAkun == MAKS_USER) {
                     cout << "============================" << endl;
                     cout << "|                          |" << endl;
                     cout << "|     " << hijau << "Registrasi Akun" << putih << "      |" << endl;
@@ -371,7 +424,8 @@ int main() {
 
                     } else {
 
-                        cout << merah << "[!] Error: Role Tidak Valid!" << putih << endl;
+                        cout << merah << "\n[!] Error: Role Tidak Valid!" << putih << endl;
+
                         cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
                         cin.get();
                     }
@@ -380,12 +434,12 @@ int main() {
 
         } else if (pilihan == '3') {
 
-            cout << merah << "[-] Anda Keluar Dari Program." << putih << endl;
+            cout << merah << "\n[-] Anda Keluar Dari Program." << putih << endl;
             cout << endl;
 
         } else {
 
-            cout << merah << "[!] Error: Pilihan Tidak Valid!" << putih << endl;
+            cout << merah << "\n[!] Error: Pilihan Tidak Valid!" << putih << endl;
 
             cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
             cin.get();
