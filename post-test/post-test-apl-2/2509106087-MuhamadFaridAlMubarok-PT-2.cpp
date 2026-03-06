@@ -9,7 +9,8 @@ using namespace std;
 #define magenta "\033[35m"
 #define abu     "\033[90m"
 
-#define MAX_USER 5
+#define MAKS_USER 5
+#define MAKS_DATA 100
 
 struct User {
     string username;
@@ -17,11 +18,20 @@ struct User {
     string role;
 };
 
-User daftarAkun[MAX_USER];
+struct Data {
+    string judul;
+    string namaPelukis;
+    string tahun;
+    string status;
+};
+
+User daftarAkun[MAKS_USER];
+Data lukisan[MAKS_DATA];
 
 int main() {
 
     int jumlahAkun = 0;
+    int jumlahData = 0;
     char pilihan;
 
     do {
@@ -29,8 +39,8 @@ int main() {
 
         cout << "====================================================" << endl;
         cout << "|                                                  |" << endl;
-        cout << "|           Bienvenue au Musee du Louvre           |" << endl; // mau warnai tapi malas, nanti aja gin
-        cout << "|  Silahkan Login atau Registrasi terlebih dahulu  |" << endl;
+        cout << "|           " << cyan << "Bienvenue au Musee du Louvre" << putih << "           |" << endl; // mau warnai tapi malas, nanti aja gin
+        cout << "|      " << biru << "Login atau Registrasi terlebih dahulu" << putih << "       |" << endl;
         cout << "|                                                  |" << endl;
         cout << "|=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=|" << endl;
         cout << "|                                                  |" << endl;
@@ -64,7 +74,7 @@ int main() {
 
                 cout << "======================" << endl;
                 cout << "|                    |" << endl;
-                cout << "|     Login Akun     |" << endl;
+                cout << "|     " << hijau << "Login Akun" << putih "     |" << endl;
                 cout << "|                    |" << endl;
                 cout << "======================" << endl;
                 cout << "\nMasukkan Username: ";
@@ -80,7 +90,7 @@ int main() {
                         loginBerhasil = true;
                         cekRole = daftarAkun[i].role;
 
-                        cout << "[+] Login Berhasil!, Selamat Datang " << usernameLogin << '!' << endl;
+                        cout << hijau << "[+] Login Berhasil!, Selamat Datang " << usernameLogin << '!' << putih << endl;
 
                         cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
                         cin.get();
@@ -90,12 +100,61 @@ int main() {
                 }
 
                 if (loginBerhasil) {
-                    system("cls");
-                    if (cekRole == "admin") {
-                        cout << hijau << "\n=== MENU ADMIN ===" << putih << endl;
-                        cout << "1. Kelola Data Museum" << endl;
 
-                    } 
+                    system("cls");
+
+                    if (cekRole == "admin") {
+                        
+                        char pilihanAdmin;
+                        
+                        do
+                        {
+                            cout << "======================================" << endl;
+                            cout << "|                                    |" << endl;
+                            cout << "|             " << biru << "MENU ADMIN" << putih << "            |" << endl;
+                            cout << "|                                    |" << endl;
+                            cout << "==-=-=-=-=-=-=--=--=--=-=-=-=-=-=-=-==" << endl;
+                            cout << "| [1]. Tambahkan Data Lukisan        |" << endl;
+                            cout << "| [2]. Lihat Data Lukisan            |" << endl;
+                            cout << "| [3]. Update Data Lukisan           |" << endl;
+                            cout << "| [4]. Hapus Data Lukisan            |" << endl;
+                            cout << "| [5]. Keluar                        |" << endl;
+                            cout << "======================================" << endl;
+                            cout << "Masukkan Pilihan: ";
+                            cin >> pilihanAdmin;
+                            
+                            if (pilihanAdmin == '1') {
+                                if (jumlahData < MAKS_DATA) {
+                                    cout << merah << "[!] Kapasitas Data Sudah Penuh!" << putih << endl;
+
+                                    cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
+                                    cin.get();
+                                } else {
+                                    cout << "Judul Lukisan: ";
+                                    cin.ignore();
+                                    getline(cin, lukisan[jumlahData].judul);
+
+                                    cout << "Nama Pelukis : ";
+                                    cin.ignore();
+                                    getline(cin, lukisan[jumlahData].namaPelukis);
+
+                                    cout << "Tahun Dibuat : ";
+                                    cin.ignore();
+                                    getline(cin, lukisan[jumlahData].tahun);
+
+                                    cout << "Status : ";
+                                    cin.ignore();
+                                    getline(cin, lukisan[jumlahData].status);
+                                    
+                                }
+                            } else if (pilihanAdmin == '2') {
+                                
+                            }
+                        } while (pilihanAdmin != 5);
+                        
+                    
+                    }
+
                     else if (cekRole == "user") {
                         cout << biru << "\n=== MENU USER ===" << putih << endl;
                         cout << "1. Lihat Koleksi" << endl;
@@ -105,7 +164,6 @@ int main() {
                     cin.get();
                     
                     break;
-
                 } else {
                     if (percobaan == 3) {
                         cout << merah << "[-] Login Gagal! Akses Ditolak!" << putih << endl;
@@ -138,7 +196,7 @@ int main() {
                 bool cekUsername = false;
 
                 system("cls");
-                if (jumlahAkun >= MAX_USER) {
+                if (jumlahAkun >= MAKS_USER) {
 
                     cout << "Maaf, Kapasitas Akun Pengguna Penuh" << endl;
 
@@ -149,7 +207,7 @@ int main() {
                 } else {
                     cout << "============================" << endl;
                     cout << "|                          |" << endl;
-                    cout << "|     Registrasi Akun      |" << endl;
+                    cout << "|     " << hijau << "Registrasi Akun" << putih << "      |" << endl;
                     cout << "|                          |" << endl;
                     cout << "============================" << endl;
                     cout << "\nMasukkan Username: ";
