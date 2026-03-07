@@ -56,7 +56,7 @@ int main() {
 
         cout << "====================================================" << endl;
         cout << "|                                                  |" << endl;
-        cout << "|           " << cyan << "Bienvenue au Musee du Louvre" << putih << "           |" << endl; // mau warnai tapi malas, nanti aja gin
+        cout << "|           " << cyan << "Bienvenue au Musee du Louvre" << putih << "           |" << endl;
         cout << "|      " << biru << "Login atau Registrasi terlebih dahulu" << putih << "       |" << endl;
         cout << "|                                                  |" << endl;
         cout << "|=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=|" << endl;
@@ -91,7 +91,7 @@ int main() {
 
                 cout << "======================" << endl;
                 cout << "|                    |" << endl;
-                cout << " |    " << hijau << "Login Akun" << putih "    |" << endl;
+                cout << " |    " << hijau << "Login Akun" << putih << "    |" << endl;
                 cout << "|                    |" << endl;
                 cout << "======================" << endl;
                 cout << "\nMasukkan Username: ";
@@ -107,7 +107,7 @@ int main() {
                         loginBerhasil = true;
                         cekRole = daftarAkun[i].role;
 
-                        cout << hijau << "\n[+] Login Berhasil!, Selamat Datang " << usernameLogin << '!' << putih << endl;
+                        cout << hijau << "\n[+] Login Berhasil! Selamat Datang, " << usernameLogin << '!' << putih << endl;
 
                         cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
                         cin.get();
@@ -139,6 +139,7 @@ int main() {
                             cout << "======================================" << endl;
                             cout << "Masukkan Pilihan: ";
                             cin >> pilihanAdmin;
+                            cin.ignore(10000, '\n');
                             
                             if (pilihanAdmin == '1') {
                                 if (jumlahData == MAKS_DATA) {
@@ -210,13 +211,13 @@ int main() {
                                 } else {
                                     system("cls");
                                     
-                                    cout << "======================================================================================" << endl;
+                                    cout << "========================================================================================" << endl;
                                     cout << "| " << cyan << setw(3) << left << "NO" << putih 
                                             "| " << biru << setw(30) << left << "JUDUL" << putih 
                                         << "| " << biru << setw(25) << left << "NAMA PELUKIS" << putih
                                         << "| " << biru << setw(6) << left << "TAHUN" << putih
-                                        << "| " << emas << setw(10) << left << "STATUS" << putih << " |" << endl;
-                                    cout << "======================================================================================" << endl;
+                                        << "| " << emas << setw(12) << left << "STATUS" << putih << " |" << endl;
+                                    cout << "========================================================================================" << endl;
                                     for (int i = 0; i < jumlahData; i++) {
                                     cout << "| " << setw(3) << left << i + 1
                                         << "| " << setw(30) << left << lukisan[i].judul
@@ -224,43 +225,105 @@ int main() {
                                         << "| " << setw(6) << left << lukisan[i].tahun 
                                         << "| " << setw(10) << lukisan[i].status << " |" << endl;
                                     }
-                                    cout << "======================================================================================" << endl;
+                                    cout << "========================================================================================" << endl;
 
-                                    cout << "\nMasukkan Nomor Data Yang Ingin DiUpdate: ";
+                                    cout << "Masukkan Nomor Data Yang Ingin Di-Update: ";
                                     cin >> indeks;
 
                                     cin.ignore(10000, '\n');
 
                                     if (indeks > 0 && indeks <= jumlahData) {
-                                        cout << "Judul Lukisan (Baru): ";
+                                        cout << "\nJudul Lukisan (Baru): ";
                                         getline(cin, lukisan[indeks - 1].judul);
-
+    
                                         cout << "Nama Pelukis (Baru): ";
                                         getline(cin, lukisan[indeks - 1].namaPelukis);
-
+    
                                         cout << "Tahun Dibuat (Baru): ";
                                         getline(cin, lukisan[indeks - 1].tahun);
-
+    
                                         cout << "Status (Baru): ";
                                         getline(cin, lukisan[indeks - 1].status);
-
-                                        cout << hijau << "\n[+]Data Lukisan Berhasil Di-Update!" << putih << endl;
-
+    
+                                        cout << hijau << "\n[+] Data Lukisan Berhasil Di-Update!" << putih << endl;
+    
                                         cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
                                         cin.get();
-
+    
                                     } else {
                                         cout << merah << "\n[!] Error: Pilihan Data Tidak Valid!" << putih << endl;
-
+    
                                         cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
                                         cin.get();
-                                        continue;
-                                    }
+                                        
+                                        }
+                                    
                                 }
-                            }
+                            } else if (pilihanAdmin == '4') {
 
+                                int indeks;
+
+                                if (jumlahData == 0) {
+                                    cout << merah << "\n[!] Belum Ada Data." << putih << endl;
+                                    cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
+                                    cin.get();
+                                } else {
+                                    system("cls");
+
+                                    cout << "========================================================================================" << endl;
+                                    cout << "| " << cyan << setw(3) << left << "NO" << putih 
+                                            "| " << biru << setw(30) << left << "JUDUL" << putih 
+                                        << "| " << biru << setw(25) << left << "NAMA PELUKIS" << putih
+                                        << "| " << biru << setw(6) << left << "TAHUN" << putih
+                                        << "| " << emas << setw(12) << left << "STATUS" << putih << " |" << endl;
+                                    cout << "========================================================================================" << endl;
+                                    for (int i = 0; i < jumlahData; i++) {
+                                    cout << "| " << setw(3) << left << i + 1
+                                        << "| " << setw(30) << left << lukisan[i].judul
+                                        << "| " << setw(25) << left << lukisan[i].namaPelukis 
+                                        << "| " << setw(6) << left << lukisan[i].tahun 
+                                        << "| " << setw(10) << lukisan[i].status << " |" << endl;
+                                    }
+                                    cout << "========================================================================================" << endl;
+                                    cout << "Masukkan Nomor Data Yang Ingin Dihapus: ";
+                                    cin >> indeks;
+                                    cin.ignore(10000, '\n');
+
+                                    
+                                    if (indeks > 0 && indeks <= jumlahData) {
+                                        for (int i = indeks - 1; i < jumlahData; i++) {
+                                            lukisan[i] = lukisan[i + 1];
+                                        }
+                                        jumlahData--;
+                                        
+                                        cout << hijau << "\n[-] Data Lukisan Berhasil Dihapus!" << putih << endl;
+                                        cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
+                                        cin.get();
+                                    } else {
+                                        cout << merah << "\n[!] Error: Pilihan Data Tidak Valid!" << putih << endl;
+                                        cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
+                                        cin.get();
+                                        }
+                                    
+                                }
+                                
+                            } else if (pilihanAdmin == '5') {
+                                cout << merah << "\nTerima Kasih Sudah Menggunakan Program Ini" << putih << endl;
+                                
+                                cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
+                                cin.get();
+
+                            } else {
+                                cout << merah << "\n[!] Error: Pilihan Tidak Valid!" << putih << endl;
+
+                                cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
+                                cin.get();
+                            }
+                            
                         } while (pilihanAdmin != '5');
-                        
+
+                        break;
+
                     } else if (cekRole == "user") {
 
                         char pilihanUser;
@@ -277,6 +340,7 @@ int main() {
                                 cout << "======================================" << endl;
                                 cout << "Masukkan Pilihan: ";
                                 cin >> pilihanUser;
+                                cin.ignore(10000, '\n');
 
                                 if (pilihanUser == '1') {
                                     if (jumlahData == 0) {
@@ -312,17 +376,22 @@ int main() {
 
                                     }
 
-                            } else if (pilihanUser == '2') {
-                                cout << merah << "\n[-] Anda Akan Keluar Dari Menu Ini." << putih << endl;
+                                } else if (pilihanUser == '2') {
+                                    cout << merah << "\n[-] Anda Akan Keluar Dari Menu Ini." << putih << endl;
 
-                                cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
-                                cin.ignore(10000, '\n');
-                                cin.get();
+                                    cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
+                                    cin.ignore(10000, '\n');
+                                    cin.get();
+                                } else {
+                                    cout << merah << "\n[!] Error: Pilihan Tidak Valid!" << putih << endl;
 
-                                break;
-                            }
+                                    cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
+                                    cin.get();
+                                }
 
-                        } while (pilihanUser != 2);
+                            } while (pilihanUser != '2');
+
+                        break;
                         
                     }
 
@@ -343,7 +412,6 @@ int main() {
                     }
                 }
             }
-            break;
 
         } else if (pilihan == '2') {
 
@@ -436,6 +504,8 @@ int main() {
 
             cout << merah << "\n[-] Anda Keluar Dari Program." << putih << endl;
             cout << endl;
+
+            return 0;
 
         } else {
 
