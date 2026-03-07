@@ -48,7 +48,7 @@ int main() {
     lukisan[9] = {"Woman with a Mirror", "Titian", "1515", "Dipamerkan"};
 
     int jumlahAkun = 2;
-    int jumlahData = 0;
+    int jumlahData = 10;
     char pilihan;
 
     do {
