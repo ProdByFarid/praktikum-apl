@@ -48,7 +48,7 @@ int main() {
     lukisan[9] = {"Woman with a Mirror", "Titian", "1515", "Dipamerkan"};
 
     int jumlahAkun = 2;
-    int jumlahData = 10;
+    int jumlahData = 0;
     char pilihan;
 
     do {
@@ -73,7 +73,7 @@ int main() {
         if (pilihan == '1') {
 
             if (jumlahAkun == 0) {
-                cout << merah << "[!] Error: Belum Ada Akun Yang Terdaftar!" << putih << endl;
+                cout << merah << "\n[!] Error: Belum Ada Akun Yang Terdaftar!" << putih << endl;
 
                 cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
                 cin.get();
@@ -150,7 +150,6 @@ int main() {
 
                                 } else {
                                     cout << "\nJudul Lukisan: ";
-                                    cin.ignore();
                                     getline(cin, lukisan[jumlahData].judul);
                                     cout << "Nama Pelukis : ";
                                     getline(cin, lukisan[jumlahData].namaPelukis);
@@ -168,7 +167,7 @@ int main() {
                                 }
                             } else if (pilihanAdmin == '2') {
                                 if (jumlahData == 0) {
-                                    cout << merah << "[!] Belum Ada Data." << putih << endl;
+                                    cout << merah << "\n[!] Belum Ada Data." << putih << endl;
 
                                     cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
                                     cin.get();
@@ -377,7 +376,7 @@ int main() {
                                     }
 
                                 } else if (pilihanUser == '2') {
-                                    cout << merah << "\n[-] Anda Akan Keluar Dari Menu Ini." << putih << endl;
+                                    cout << merah << "\n[-] Terima Kasih Sudah Menggunakan Program Ini." << putih << endl;
 
                                     cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
                                     cin.ignore(10000, '\n');
@@ -398,9 +397,10 @@ int main() {
                 } else {
                     if (percobaan == 3) {
                         cout << merah << "\n[-] Login Gagal! Akses Ditolak!" << putih << endl;
+                        cout << "\nJumlah Percobaan: " << percobaan << endl;
                         cout << endl;
 
-                        break;
+                        return 0;
                     } else {
                         cout << merah << "\n[-] Username Atau Password! Silahkan Coba Lagi!" << putih << endl;
                         percobaan++;
