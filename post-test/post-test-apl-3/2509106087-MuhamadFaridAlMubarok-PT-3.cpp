@@ -2,8 +2,6 @@
 #include <iomanip>
 #include <conio.h>
 
-// g++ 2509106087-MuhamadFaridAlMubarok-PT-3.cpp -o 2509106087-MuhamadFaridAlMubarok-PT-3.exe ; .\2509106087-MuhamadFaridAlMubarok-PT-3
-
 using namespace std;
 
 #define putih   "\033[0m"
@@ -18,11 +16,6 @@ using namespace std;
 #define MAKS_USER 5
 #define MAKS_DATA 100
 
-void jeda() {
-    cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
-    getche();
-}
-
 struct User {
     string username;
     string password;
@@ -36,12 +29,17 @@ struct Data {
     string status;
 };
 
-User daftarAkun[MAKS_USER];
-Data lukisan[MAKS_DATA];
-int jumlahAkun = 2;
-int jumlahData = 10;
+void clearScreen() {
+    system("cls");
+}
+
+void jeda() {
+    cout << abu << "\n[Tekan Enter Untuk Melanjutkan...]" << putih;
+    getch();
+}
 
 void menuUtama() {
+    clearScreen();
     cout << "====================================================" << endl;
     cout << "|                                                  |" << endl;
     cout << "|           " << cyan << "Bienvenue au Musee du Louvre" << putih << "           |" << endl;
@@ -51,20 +49,53 @@ void menuUtama() {
     cout << "|                                                  |" << endl;
     cout << "|  [1]. Login                                      |" << endl;
     cout << "|  [2]. Registrasi                                 |" << endl;
-    cout << "|  [3]. Keluar Program                             |" << endl;
+    cout << "|  [3]. Keluar                                     |" << endl;
     cout << "|                                                  |" << endl;
     cout << "====================================================" << endl;
+    cout << "Masukkan Opsi: ";
 }
 
-void menuLogin() {
-    cout << "======================" << endl;
-    cout << "|                    |" << endl;
-    cout << "|    " << hijau << "Login Akun" << putih << "   |" << endl;
-    cout << "|                    |" << endl;
-    cout << "======================" << endl;
+void menuAdmin() {
+    clearScreen();
+    cout << "======================================" << endl;
+    cout << "|                                    |" << endl;
+    cout << " |            " << biru << "MENU ADMIN" << putih << "            |" << endl;
+    cout << "|                                    |" << endl;
+    cout << "==-=-=-=-=-=-=--=--=--=-=-=-=-=-=-=-==" << endl;
+    cout << "| [1]. Tambahkan Data Lukisan        |" << endl;
+    cout << "| [2]. Lihat Data Lukisan            |" << endl;
+    cout << "| [3]. Update Data Lukisan           |" << endl;
+    cout << "| [4]. Hapus Data Lukisan            |" << endl;
+    cout << "| [5]. Keluar                        |" << endl;
+    cout << "======================================" << endl;
+    cout << "Masukkan Pilihan: ";
 }
 
-void menuRegister() {
+void menuUser() {
+    clearScreen();
+    cout << "======================================" << endl;
+    cout << "|                                    |" << endl;
+    cout << " |            " << biru << "MENU USER " << putih << "            |" << endl;
+    cout << "|                                    |" << endl;
+    cout << "==-=-=-=-=-=-=--=--=--=-=-=-=-=-=-=-==" << endl;
+    cout << "| [1]. Lihat Data Lukisan            |" << endl;
+    cout << "| [2]. Keluar                        |" << endl;
+    cout << "======================================" << endl;
+    cout << "Masukkan Pilihan: ";
+}
+
+void tampilLogin() {
+    clearScreen();
+    cout << "======================" << endl;
+    cout << "|                    |" << endl;
+    cout << " |    " << hijau << "Login Akun" << putih << "    |" << endl;
+    cout << "|                    |" << endl;
+    cout << "======================" << endl;
+    cout << "\nMasukkan Username: ";
+}
+
+void tampilRegistrasi() {
+    clearScreen();
     cout << "============================" << endl;
     cout << "|                          |" << endl;
     cout << "|     " << hijau << "Registrasi Akun" << putih << "      |" << endl;
@@ -72,51 +103,270 @@ void menuRegister() {
     cout << "============================" << endl;
 }
 
-void menuAdmin() {
-    cout << "======================================" << endl;
-    cout << "|                                    |" << endl;
-    cout << "|            " << biru << "MENU ADMIN" << putih << "           |" << endl;
-    cout << "|                                    |" << endl;
-    cout << "==-=-=-=-=-=-=--=--=--=-=-=-=-=-=-=-==" << endl;
-    cout << "| [1]. Tambahkan Data Lukisan        |" << endl;
-    cout << "| [2]. Lihat Data Lukisan            |" << endl;
-    cout << "| [3]. Update Data Lukisan           |" << endl;
-    cout << "| [4]. Hapus Data Lukisan            |" << endl;
-    cout << "| [5]. Logout                        |" << endl;
-    cout << "======================================" << endl;
-}
-
-void menuUser() {
-    cout << "======================================" << endl;
-    cout << "|                                    |" << endl;
-    cout << "|            " << biru << "MENU USER " << putih << "           |" << endl;
-    cout << "|                                    |" << endl;
-    cout << "==-=-=-=-=-=-=--=--=--=-=-=-=-=-=-=-==" << endl;
-    cout << "| [1]. Lihat Data Lukisan            |" << endl;
-    cout << "| [2]. Logout                        |" << endl;
-    cout << "======================================" << endl;
-}
-
-void tabelLukisan() {
-    cout << "========================================================================================" << endl;
+void tampilTabelLukisan(Data lukisan[], int jumlahData, bool styleAdmin) {
+    cout << "======================================================================================" << endl;
     cout << "| " << cyan << setw(3) << left << "NO" << putih 
-        "| " << biru << setw(30) << left << "JUDUL" << putih 
-    << "| " << biru << setw(25) << left << "NAMA PELUKIS" << putih
-    << "| " << biru << setw(6) << left << "TAHUN" << putih
-    << "| " << emas << setw(12) << left << "STATUS" << putih << " |" << endl;
-    cout << "========================================================================================" << endl;
-
+        << "| " << biru << setw(30) << left << "JUDUL" << putih 
+        << "| " << biru << setw(25) << left << "NAMA PELUKIS" << putih
+        << "| " << biru << setw(6) << left << "TAHUN" << putih
+        << "| " << emas << setw(10) << left << "STATUS" << putih << " |" << endl;
+    cout << "======================================================================================" << endl;
+    
     for (int i = 0; i < jumlahData; i++) {
-    cout << "| " << setw(3) << left << i + 1
-    << "| " << setw(30) << left << lukisan[i].judul
-    << "| " << setw(25) << left << lukisan[i].namaPelukis 
-    << "| " << setw(6) << left << lukisan[i].tahun 
-    << "| " << setw(10) << lukisan[i].status << " |" << endl;
+        cout << "| " << setw(3) << left << i + 1
+            << "| " << setw(30) << left << lukisan[i].judul
+            << "| " << setw(25) << left << lukisan[i].namaPelukis 
+            << "| " << setw(6) << left << lukisan[i].tahun 
+            << "| " << setw(10) << lukisan[i].status << " |" << endl;
+    }
+    cout << "======================================================================================" << endl;
 }
-cout << "========================================================================================" << endl;
+
+bool prosesLogin(string &cekRole, User daftarAkun[], int jumlahAkun) {
+    int percobaan = 1;
+    string usernameLogin, passwordLogin;
+
+    while (percobaan <= 3) {
+        tampilLogin();
+        getline(cin, usernameLogin);
+
+        cout << "Masukkan Password: ";
+        cin >> passwordLogin;
+        cin.ignore(10000, '\n');
+
+        for (int i = 0; i < jumlahAkun; i++) {
+            if (usernameLogin == daftarAkun[i].username && passwordLogin == daftarAkun[i].password) {
+                cekRole = daftarAkun[i].role;
+                cout << hijau << "\n[+] Login Berhasil! Selamat Datang, " << usernameLogin << '!' << putih << endl;
+                jeda();
+                return true;
+            }
+        }
+
+        if (percobaan == 3) {
+            cout << merah << "\n[-] Login Gagal! Akses Ditolak!" << putih << endl;
+            cout << "\nJumlah Percobaan: " << percobaan << endl;
+            return false;
+        } else {
+            cout << merah << "\n[-] Username Atau Password Salah! Silahkan Coba Lagi!" << putih << endl;
+            percobaan++;
+            cout << "\nJumlah Percobaan: " << percobaan - 1 << endl;
+            jeda();
+        }
+    }
+    return false;
+}
+
+int tambahDataLukisan(Data lukisan[], int jumlahData) {
+    if (jumlahData == MAKS_DATA) {
+        cout << merah << "\n[!] Kapasitas Data Sudah Penuh!" << putih << endl;
+        jeda();
+        return jumlahData;
+    } else {
+        cout << "\nJudul Lukisan: ";
+        getline(cin, lukisan[jumlahData].judul);
+        cout << "Nama Pelukis : ";
+        getline(cin, lukisan[jumlahData].namaPelukis);
+        cout << "Tahun Dibuat : ";
+        getline(cin, lukisan[jumlahData].tahun);
+        cout << "Status : ";
+        getline(cin, lukisan[jumlahData].status);
+        
+        cout << hijau << "\n[+] Data Berhasil Ditambahkan." << putih << endl;
+        jeda();
+        return jumlahData + 1;
+    }
+}
+
+void lihatDataLukisan(Data lukisan[], int jumlahData) {
+    if (jumlahData == 0) {
+        cout << merah << "\n[!] Belum Ada Data." << putih << endl;
+        jeda();
+    } else {
+        clearScreen();
+        tampilTabelLukisan(lukisan, jumlahData, true);
+        jeda();
+        cin.ignore(10000, '\n');
+        clearScreen();
+    }
+}
+
+void updateDataLukisan(Data lukisan[], int jumlahData) {
+    int indeks;
+    if (jumlahData == 0) {
+        cout << merah << "\n[!] Belum Ada Data." << putih << endl;
+        jeda();
+    } else {
+        clearScreen();
+        tampilTabelLukisan(lukisan, jumlahData, true);
+
+        cout << "Masukkan Nomor Data Yang Ingin Di-Update: ";
+        cin >> indeks;
+        cin.ignore(10000, '\n');
+
+        if (indeks > 0 && indeks <= jumlahData) {
+            cout << "\nJudul Lukisan (Baru): ";
+            getline(cin, lukisan[indeks - 1].judul);
+            cout << "Nama Pelukis (Baru): ";
+            getline(cin, lukisan[indeks - 1].namaPelukis);
+            cout << "Tahun Dibuat (Baru): ";
+            getline(cin, lukisan[indeks - 1].tahun);
+            cout << "Status (Baru): ";
+            getline(cin, lukisan[indeks - 1].status);
+            cout << hijau << "\n[+] Data Lukisan Berhasil Di-Update!" << putih << endl;
+            jeda();
+        } else {
+            cout << merah << "\n[!] Error: Pilihan Data Tidak Valid!" << putih << endl;
+            jeda();
+        }
+    }
+}
+
+int hapusDataLukisan(Data lukisan[], int jumlahData) {
+    int indeks;
+    if (jumlahData == 0) {
+        cout << merah << "\n[!] Belum Ada Data." << putih << endl;
+        jeda();
+        return jumlahData;
+    } else {
+        clearScreen();
+        tampilTabelLukisan(lukisan, jumlahData, true);
+        
+        cout << "Masukkan Nomor Data Yang Ingin Dihapus: ";
+        cin >> indeks;
+        cin.ignore(10000, '\n');
+
+        if (indeks > 0 && indeks <= jumlahData) {
+            for (int i = indeks - 1; i < jumlahData; i++) {
+                lukisan[i] = lukisan[i + 1];
+            }
+            cout << hijau << "\n[-] Data Lukisan Berhasil Dihapus!" << putih << endl;
+            jeda();
+            return jumlahData - 1;
+        } else {
+            cout << merah << "\n[!] Error: Pilihan Data Tidak Valid!" << putih << endl;
+            jeda();
+            return jumlahData;
+        }
+    }
+}
+
+void jalankanMenuAdmin(Data lukisan[], int &jumlahData) {
+    char pilihanAdmin;
+    do {
+        menuAdmin();
+        cin >> pilihanAdmin;
+        cin.ignore(10000, '\n');
+        
+        if (pilihanAdmin == '1') {
+            jumlahData = tambahDataLukisan(lukisan, jumlahData);
+        } else if (pilihanAdmin == '2') {
+            lihatDataLukisan(lukisan, jumlahData);
+        } else if (pilihanAdmin == '3') {
+            updateDataLukisan(lukisan, jumlahData);
+        } else if (pilihanAdmin == '4') {
+            jumlahData = hapusDataLukisan(lukisan, jumlahData);
+        } else if (pilihanAdmin == '5') {
+            cout << merah << "\nTerima Kasih Sudah Menggunakan Program Ini" << putih << endl;
+            jeda();
+        } else {
+            cout << merah << "\n[!] Error: Pilihan Tidak Valid!" << putih << endl;
+            jeda();
+        }
+    } while (pilihanAdmin != '5');
+}
+
+void jalankanMenuUser(Data lukisan[], int jumlahData) {
+    char pilihanUser;
+    do {
+        menuUser();
+        cin >> pilihanUser;
+        cin.ignore(10000, '\n');
+
+        if (pilihanUser == '1') {
+            if (jumlahData == 0) {
+                cout << merah << "\n[!] Data Belum Ada." << putih << endl;
+                jeda();
+            } else {
+                clearScreen();
+                tampilTabelLukisan(lukisan, jumlahData, false);
+                cin.ignore(10000, '\n');
+                jeda();
+                clearScreen();
+            }
+        } else if (pilihanUser == '2') {
+            cout << merah << "\n[-] Terima Kasih Sudah Menggunakan Program Ini." << putih << endl;
+            cin.ignore(10000, '\n');
+            jeda();
+        } else {
+            cout << merah << "\n[!] Error: Pilihan Tidak Valid!" << putih << endl;
+            jeda();
+        }
+    } while (pilihanUser != '2');
+}
+
+bool prosesRegistrasi(User daftarAkun[], int &jumlahAkun) {
+    string pilihRole;
+    while (true) {
+        bool cekUsername = false;
+        tampilRegistrasi();
+        
+        if (jumlahAkun == MAKS_USER) {
+            cout << merah << "\n[!] Error: Kapasitas Akun Pengguna Penuh" << putih << endl;
+            jeda();
+            return false;
+        } else {
+            cout << "\nMasukkan Username: ";
+            getline(cin, daftarAkun[jumlahAkun].username);
+
+            for (int i = 0; i < jumlahAkun; i++) {
+                if (daftarAkun[jumlahAkun].username == daftarAkun[i].username) {
+                    cekUsername = true;
+                    break; 
+                }
+            }
+
+            if (cekUsername) {
+                cout << merah << "\n[!] Error: Username Telah Dipakai!" << putih << endl;
+                jeda();
+                continue;
+            }
+
+            cout << "Masukkan Password: ";
+            cin >> daftarAkun[jumlahAkun].password;
+
+            cout << "Pilih Role (admin/user): ";
+            cin >> pilihRole;
+            cin.ignore(10000, '\n');
+
+            if (pilihRole == "admin" || pilihRole == "Admin" || pilihRole == "ADMIN") {
+                daftarAkun[jumlahAkun].role = "admin";
+                jumlahAkun++;
+                cout << hijau << "\n[+] Akun Berhasil Dibuat! Silahkan Login!" << endl;
+                cout << "[+] Role: " << pilihRole << putih << endl;
+                jeda();
+                return true;
+            } else if (pilihRole == "user" || pilihRole == "User" || pilihRole == "USER") {
+                daftarAkun[jumlahAkun].role = "user";
+                jumlahAkun++;
+                cout << hijau << "\n[+] Akun Berhasil Dibuat! Silahkan Login!" << endl;
+                cout << "[+] Role: " << pilihRole << putih << endl;
+                jeda();
+                return true;
+            } else {
+                cout << merah << "\n[!] Error: Role Tidak Valid!" << putih << endl;
+                jeda();
+            }
+        }
+    }
 }
 
 int main() {
+
+    User daftarAkun[MAKS_USER];
+    Data lukisan[MAKS_DATA];
+    int jumlahAkun = 2;
+    int jumlahData = 10;
 
     daftarAkun[0] = {"farid", "087", "admin"};
     daftarAkun[1] = {"parid", "087", "user"};
@@ -132,10 +382,44 @@ int main() {
     lukisan[8] = {"The Fortune Teller", "Caravaggio", "1594", "Dipamerkan"};
     lukisan[9] = {"Woman with a Mirror", "Titian", "1515", "Dipamerkan"};
 
-    tabelLukisan();
+    char pilihan;
+    do {
+        menuUtama();
+        cin >> pilihan;
+        cin.ignore(10000, '\n');
+
+        if (pilihan == '1') {
+            if (jumlahAkun == 0) {
+                cout << merah << "\n[!] Error: Belum Ada Akun Yang Terdaftar!" << putih << endl;
+                jeda();
+                continue;
+            }
+
+            string cekRole = "";
+            if (prosesLogin(cekRole, daftarAkun, jumlahAkun)) {
+                if (cekRole == "admin") {
+                    jalankanMenuAdmin(lukisan, jumlahData);
+                } else if (cekRole == "user") {
+                    jalankanMenuUser(lukisan, jumlahData);
+                }
+            } else {
+                return 0;
+            }
+
+        } else if (pilihan == '2') {
+            prosesRegistrasi(daftarAkun, jumlahAkun);
+
+        } else if (pilihan == '3') {
+            cout << merah << "\n[-] Anda Keluar Dari Program." << putih << endl;
+            cout << endl;
+            return 0;
+
+        } else {
+            cout << merah << "\n[!] Error: Pilihan Tidak Valid!" << putih << endl;
+            jeda();
+        }
+
+    } while (pilihan != '3');
 
     return 0;
-
 }
-
-
