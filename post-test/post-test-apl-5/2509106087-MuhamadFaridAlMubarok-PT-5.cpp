@@ -5,6 +5,8 @@
 
 using namespace std;
 
+// g++ 2509106087-MuhamadFaridAlMubarok-PT-5.cpp -o 2509106087-MuhamadFaridAlMubarok-PT-5 ; .\2509106087-MuhamadFaridAlMubarok-PT-5
+
 #define putih   "\033[0m"
 #define merah   "\033[31m"
 #define biru    "\033[34m"
@@ -16,6 +18,7 @@ using namespace std;
 
 #define MAKS_USER 5
 #define MAKS_DATA 100
+
 
 struct User {
     string username;
@@ -29,6 +32,12 @@ struct Data {
     string tahun;
     string status;
 };
+
+User daftarAkun[MAKS_USER];
+Data lukisan[MAKS_DATA];
+
+int jumlahAkun = 2;
+int jumlahData = 10;
 
 void clearScreen() {
     system("cls");
@@ -89,15 +98,16 @@ void menuUser() {
 
 void menuSorting() {
     clearScreen();
-    cout << "======================================" << endl;
-    cout << "|                                    |" << endl;
-    cout << " |  " << biru << "PILIH METODE SORTING " << putih << "  |" << endl;
-    cout << "|                                    |" << endl;
+    cout << "=======================================" << endl;
+    cout << "|                                     |" << endl;
+    cout << " |        " << biru << "PILIH METODE SORTING" << putih << "       |" << endl;
+    cout << "|                                     |" << endl;
     cout << "==-=-=-=-=-=-=--=--=--=-=-=-=-=-=-=-==" << endl;
-    cout << "| [1]. Lihat Data Lukisan            |" << endl;
-    cout << "| [2]. Sorting                       |" << endl;
-    cout << "| [3]. Sorting                       |" << endl;
-    cout << "======================================" << endl;
+    cout << "| [0]. Keluar                         |" << endl;
+    cout << "| [1]. Urutkan Judul Lukisan          |" << endl;
+    cout << "| [2]. Urutkan Tahun Lukisan          |" << endl;
+    cout << "| [3]. Urutkan Nama Pelukis           |" << endl;
+    cout << "=======================================" << endl;
     cout << "Masukkan Pilihan: ";
 }
 
@@ -286,6 +296,9 @@ void jalankanMenuAdmin(Data *lukisan, int &jumlahData) {
             updateDataLukisan(lukisan, jumlahData);
         } else if (pilihanAdmin == '4') {
             jumlahData = hapusDataLukisan(lukisan, jumlahData);
+        } else if (pilihanAdmin == '5') {
+            jalankanMenuSorting();
+            continue;
         } else {
             cout << merah << "\n[!] Error: Pilihan Tidak Valid!" << putih << endl;
             jeda();
@@ -316,12 +329,41 @@ void jalankanMenuUser(Data *lukisan, int jumlahData) {
                 clearScreen();
             }
         } else if (pilihanUser == '2'){
-            menuSorting();
+            jalankanMenuSorting();
+            continue;
         } else {
             cout << merah << "\n[!] Error: Pilihan Tidak Valid!" << putih << endl;
             jeda();
         }
     } while (pilihanUser != '0');
+}
+
+void jalankanMenuSorting() {
+    char pilihanSort;
+
+    do
+    {
+        clearScreen();
+        menuSorting();
+        cin >> pilihanSort;
+        cin.ignore(10000, '\n');
+
+        if (pilihanSort == '0') {
+            cout << merah << "[!] Anda Akan Keluar Dari Menu Ini" << putih << endl;
+            jeda();
+        } else if (pilihanSort == '1') {
+            selectionSort();
+        } else if (pilihanSort == '2') {
+            insertionSort();
+        } else if (pilihanSort == '3') {
+            bubbleSort();
+        } else {
+            cout << merah << "\n [!] Error: Pilihan Tidak Valid1!" << putih << endl;
+            jeda();
+        }
+
+    } while (pilihanSort != '0');
+    
 }
 
 bool prosesRegistrasi(User *daftarAkun, int &jumlahAkun) {
@@ -380,12 +422,86 @@ bool prosesRegistrasi(User *daftarAkun, int &jumlahAkun) {
     }
 }
 
-int main() {
+void tukar(Data *a, Data *b) {
+    Data temp = *a;
+    *a = *b;
+    *b = temp;
+}
 
-    User daftarAkun[MAKS_USER];
-    Data lukisan[MAKS_DATA];
-    int jumlahAkun = 2;
-    int jumlahData = 10;
+void selectionSort() {
+    if (jumlahData == 0) {
+        cout << merah << "[!] Error: Tidak Ada Yang Dapat Diurutkan" << putih << endl;
+        jeda();
+    } else {
+        for (int i = 0; i < jumlahData - 1; i++) {
+            int indeksMin = i;
+            
+            for (int j = i + 1; j < jumlahData; j++) {
+                if (lukisan[j].judul < lukisan[indeksMin].judul) {
+                    indeksMin = j;
+                } 
+            }
+
+            if (indeksMin != i) {
+                tukar(&lukisan[indeksMin], &lukisan[i]);
+            }
+        }
+        cout << hijau << "\n[+] Data Berhasil Diurutkan!" << endl;
+        cout << "[+] Silahkan Cek Di Pilihan Nomor 2" << putih << endl;
+        jeda();
+    }
+}
+
+void insertionSort() {
+    if (jumlahData == 0) {
+        cout << merah << "[!] Error: Tidak Ada Yang Dapat Diurutkan" << putih << endl;
+        jeda();
+    } else {
+        for (int i = 1; i < jumlahData; i++) {
+        Data key = lukisan[i];
+        int j = i - 1;
+
+        while (j >= 0 && lukisan[j].tahun < key.tahun) {
+            lukisan[j + 1] = lukisan[j];
+            j--;
+        }
+        lukisan[j + 1] = key;
+        }
+    cout << hijau << "\n[+] Data Berhasil Diurutkan!" << endl;
+    cout << "[+] Silahkan Cek Di Pilihan Nomor 2" << putih << endl;
+    jeda();
+    }
+}
+
+void bubbleSort() {
+    bool tertukar;
+    if (jumlahData == 0) {
+        cout << merah << "[!] Error: Tidak Ada Yang Dapat Diurutkan" << putih << endl;
+        jeda();
+    } else {
+        for (int i = 0; i < jumlahData - 1; i++) {
+            tertukar = false;
+
+            for (int j = 0; j < jumlahData - i - 1; j++) {
+                if (lukisan[j].namaPelukis > lukisan[j + 1].namaPelukis) {
+
+                    tukar(&lukisan[j], &lukisan[j + 1]);
+                    tertukar = true;
+                }
+            }
+            if (tertukar == false) {
+                break;
+
+            }
+        }
+    cout << hijau << "\n[+] Data Berhasil Diurutkan!" << endl;
+    cout << "[+] Silahkan Cek Di Pilihan Nomor 2" << putih << endl;
+    jeda();
+
+    }
+}
+
+int main() {
 
     daftarAkun[0] = {"farid", "087", "admin"};
     daftarAkun[1] = {"parid", "087", "user"};
