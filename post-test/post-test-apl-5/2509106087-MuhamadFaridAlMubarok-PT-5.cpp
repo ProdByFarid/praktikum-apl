@@ -33,6 +33,11 @@ struct Data {
     string status;
 };
 
+void jalankanMenuSorting();
+void selectionSort();
+void insertionSort();
+void bubbleSort();
+
 User daftarAkun[MAKS_USER];
 Data lukisan[MAKS_DATA];
 
