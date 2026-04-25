@@ -3,6 +3,7 @@
 #include <conio.h>
 #include <string>
 #include <algorithm>
+#include <stdexcept>
 
 using namespace std;
 
@@ -199,9 +200,7 @@ bool prosesLogin(string &cekRole, User *daftarAkun, int jumlahAkun) {
         }
 
         if (percobaan == 3) {
-            cout << merah << "\n[-] Login Gagal! Akses Ditolak!" << putih << endl;
-            cout << "\nJumlah Percobaan: " << percobaan << endl;
-            return false;
+            throw runtime_error("Akses Ditolak: Jumlah Percobaan Login Habis!");
         } else {
             cout << merah << "\n[-] Username Atau Password Salah! Silahkan Coba Lagi!" << putih << endl;
             percobaan++;
@@ -214,46 +213,49 @@ bool prosesLogin(string &cekRole, User *daftarAkun, int jumlahAkun) {
 
 int tambahDataLukisan(Data *lukisan, int jumlahData) {
     if (jumlahData == MAKS_DATA) {
-        cout << merah << "\n[!] Kapasitas Data Sudah Penuh!" << putih << endl;
-        jeda();
-        return jumlahData;
+        throw runtime_error("Kapasitas Data Sudah Penuh!");
     } else {
         while (true) {
-            
-            clearScreen();
-            tampilTabelLukisan(lukisan, jumlahData, true);
-            
-            cout << hijau << "\n[!] Pastikan ID Tidak Sama Dengan ID Yang Lain!" << putih << endl;
-    
-            cout << "\nID Lukisan: ";
-            getline(cin, lukisan[jumlahData].id);
-    
-            bool idDuplikat = false;
-            for (int i = 0; i < jumlahData; i++) {
-                if (lukisan[i].id == lukisan[jumlahData].id) {
-                    idDuplikat = true;
-                    break;
+            try {
+                clearScreen();
+                tampilTabelLukisan(lukisan, jumlahData, true);
+                
+                cout << hijau << "\n[!] Pastikan ID Tidak Sama Dengan ID Yang Lain!" << putih << endl;
+        
+                cout << "\nID Lukisan: ";
+                string idBaru;
+                getline(cin, idBaru);
+        
+                bool idDuplikat = false;
+                for (int i = 0; i < jumlahData; i++) {
+                    if (lukisan[i].id == idBaru) {
+                        idDuplikat = true;
+                        break;
+                    }
                 }
-            }
-    
-            if (idDuplikat) {
-                cout << merah << "\n[!] Error: ID Tidak Boleh Sama" << putih << endl;
+        
+                if (idDuplikat) {
+                    throw invalid_argument("ID Tidak Boleh Sama Dengan Data Existing");
+                }
+        
+                lukisan[jumlahData].id = idBaru;
+                cout << "\nJudul Lukisan: ";
+                getline(cin, lukisan[jumlahData].judul);
+                cout << "Nama Pelukis : ";
+                getline(cin, lukisan[jumlahData].namaPelukis);
+                cout << "Tahun Dibuat : ";
+                getline(cin, lukisan[jumlahData].tahun);
+                cout << "Status : ";
+                getline(cin, lukisan[jumlahData].status);
+                
+                cout << hijau << "\n[+] Data Berhasil Ditambahkan." << putih << endl;
                 jeda();
-                continue;
-            }
-    
-            cout << "\nJudul Lukisan: ";
-            getline(cin, lukisan[jumlahData].judul);
-            cout << "Nama Pelukis : ";
-            getline(cin, lukisan[jumlahData].namaPelukis);
-            cout << "Tahun Dibuat : ";
-            getline(cin, lukisan[jumlahData].tahun);
-            cout << "Status : ";
-            getline(cin, lukisan[jumlahData].status);
+                return jumlahData + 1;
             
-            cout << hijau << "\n[+] Data Berhasil Ditambahkan." << putih << endl;
-            jeda();
-            return jumlahData + 1;
+            } catch (const invalid_argument& e) {
+                cout << merah << "\n[!] Error: " << e.what() << putih << endl;
+                jeda();
+            }
         }
     }
 }
@@ -277,14 +279,18 @@ void updateDataLukisan(Data *lukisan, int jumlahData) {
         cout << merah << "\n[!] Belum Ada Data." << putih << endl;
         jeda();
     } else {
-        clearScreen();
-        tampilTabelLukisan(lukisan, jumlahData, true);
+        try {
+            clearScreen();
+            tampilTabelLukisan(lukisan, jumlahData, true);
 
-        cout << "Masukkan Nomor Data Yang Ingin Di-Update: ";
-        cin >> indeks;
-        cin.ignore(10000, '\n');
+            cout << "Masukkan Nomor Data Yang Ingin Di-Update: ";
+            cin >> indeks;
+            cin.ignore(10000, '\n');
 
-        if (indeks > 0 && indeks <= jumlahData) {
+            if (indeks <= 0 || indeks > jumlahData) {
+                throw out_of_range("Nomor Data Tidak Valid (Out of Range)");
+            }
+
             cout << "\nJudul Lukisan (Baru): ";
             getline(cin, lukisan[indeks - 1].judul);
             cout << "Nama Pelukis (Baru): ";
@@ -295,8 +301,9 @@ void updateDataLukisan(Data *lukisan, int jumlahData) {
             getline(cin, lukisan[indeks - 1].status);
             cout << hijau << "\n[+] Data Lukisan Berhasil Di-Update!" << putih << endl;
             jeda();
-        } else {
-            cout << merah << "\n[!] Error: Pilihan Data Tidak Valid!" << putih << endl;
+
+        } catch (const out_of_range& e) {
+            cout << merah << "\n[!] Error: " << e.what() << putih << endl;
             jeda();
         }
     }
@@ -309,22 +316,27 @@ int hapusDataLukisan(Data *lukisan, int jumlahData) {
         jeda();
         return jumlahData;
     } else {
-        clearScreen();
-        tampilTabelLukisan(lukisan, jumlahData, true);
-        
-        cout << "Masukkan Nomor Data Yang Ingin Dihapus: ";
-        cin >> indeks;
-        cin.ignore(10000, '\n');
+        try {
+            clearScreen();
+            tampilTabelLukisan(lukisan, jumlahData, true);
+            
+            cout << "Masukkan Nomor Data Yang Ingin Dihapus: ";
+            cin >> indeks;
+            cin.ignore(10000, '\n');
 
-        if (indeks > 0 && indeks <= jumlahData) {
+            if (indeks <= 0 || indeks > jumlahData) {
+                throw out_of_range("Nomor Data Tidak Valid (Out of Range)");
+            }
+
             for (int i = indeks - 1; i < jumlahData - 1; i++) {
                 lukisan[i] = lukisan[i + 1];
             }
             cout << hijau << "\n[-] Data Lukisan Berhasil Dihapus!" << putih << endl;
             jeda();
             return jumlahData - 1;
-        } else {
-            cout << merah << "\n[!] Error: Pilihan Data Tidak Valid!" << putih << endl;
+
+        } catch (const out_of_range& e) {
+            cout << merah << "\n[!] Error: " << e.what() << putih << endl;
             jeda();
             return jumlahData;
         }
@@ -355,11 +367,17 @@ void jalankanMenuAdmin(Data *lukisan, int &jumlahData) {
             } else if (pilihanAdmin == '6') {
                 jalankanMenuSearching();
             } else {
-                throw invalid_argument ("Pilihan Tidak Valid!");
+                throw invalid_argument("Pilihan Menu Tidak Valid!");
             } 
             
         } catch (const invalid_argument& e) {
             cout << merah << "\n[!] Error: " << e.what() << putih << endl;
+            jeda();
+        } catch (const runtime_error& e) {
+            cout << merah << "\n[!] Error Sistem: " << e.what() << putih << endl;
+            jeda();
+        } catch (const out_of_range& e) {
+            cout << merah << "\n[!] Error Data: " << e.what() << putih << endl;
             jeda();
         }
         
@@ -369,32 +387,36 @@ void jalankanMenuAdmin(Data *lukisan, int &jumlahData) {
 void jalankanMenuUser(Data *lukisan, int jumlahData) {
     char pilihanUser;
     do {
-        menuUser();
-        cin >> pilihanUser;
-        cin.ignore(10000, '\n');
-
-        if (pilihanUser == '0') {
-            cout << merah << "\n[-] Terima Kasih Sudah Menggunakan Program Ini." << putih << endl;
+        try {
+            menuUser();
+            cin >> pilihanUser;
             cin.ignore(10000, '\n');
-            jeda();
-        } else if (pilihanUser == '1') {
-            if (jumlahData == 0) {
-                cout << merah << "\n[!] Data Belum Ada." << putih << endl;
-                jeda();
-            } else {
-                clearScreen();
-                tampilTabelLukisan(lukisan, jumlahData, false);
+
+            if (pilihanUser == '0') {
+                cout << merah << "\n[-] Terima Kasih Sudah Menggunakan Program Ini." << putih << endl;
                 cin.ignore(10000, '\n');
                 jeda();
-                clearScreen();
+            } else if (pilihanUser == '1') {
+                if (jumlahData == 0) {
+                    cout << merah << "\n[!] Data Belum Ada." << putih << endl;
+                    jeda();
+                } else {
+                    clearScreen();
+                    tampilTabelLukisan(lukisan, jumlahData, false);
+                    cin.ignore(10000, '\n');
+                    jeda();
+                    clearScreen();
+                }
+            } else if (pilihanUser == '2'){
+                jalankanMenuSorting();
+                continue;
+            } else if (pilihanUser == '3') {
+                jalankanMenuSearching();
+            } else {
+                throw invalid_argument("Pilihan Menu Tidak Valid!");
             }
-        } else if (pilihanUser == '2'){
-            jalankanMenuSorting();
-            continue;
-        } else if (pilihanUser == '3') {
-            jalankanMenuSearching();
-        } else {
-            cout << merah << "\n[!] Error: Pilihan Tidak Valid!" << putih << endl;
+        } catch (const invalid_argument& e) {
+            cout << merah << "\n[!] Error: " << e.what() << putih << endl;
             jeda();
         }
     } while (pilihanUser != '0');
@@ -404,22 +426,26 @@ void jalankanMenuSorting() {
     char pilihanSort;
 
     do {
-        clearScreen();
-        menuSorting();
-        cin >> pilihanSort;
-        cin.ignore(10000, '\n');
+        try {
+            clearScreen();
+            menuSorting();
+            cin >> pilihanSort;
+            cin.ignore(10000, '\n');
 
-        if (pilihanSort == '0') {
-            cout << merah << "\n[!] Anda Akan Keluar Dari Menu Ini" << putih << endl;
-            jeda();
-        } else if (pilihanSort == '1') {
-            selectionSort();
-        } else if (pilihanSort == '2') {
-            insertionSort();
-        } else if (pilihanSort == '3') {
-            bubbleSort();
-        } else {
-            cout << merah << "\n[!] Error: Pilihan Tidak Valid!" << putih << endl;
+            if (pilihanSort == '0') {
+                cout << merah << "\n[!] Anda Akan Keluar Dari Menu Ini" << putih << endl;
+                jeda();
+            } else if (pilihanSort == '1') {
+                selectionSort();
+            } else if (pilihanSort == '2') {
+                insertionSort();
+            } else if (pilihanSort == '3') {
+                bubbleSort();
+            } else {
+                throw invalid_argument("Pilihan Sorting Tidak Valid!");
+            }
+        } catch (const invalid_argument& e) {
+            cout << merah << "\n[!] Error: " << e.what() << putih << endl;
             jeda();
         }
 
@@ -431,20 +457,24 @@ void jalankanMenuSearching() {
     char pilihanSearch;
 
     do {
-        clearScreen();
-        menuSearching();
-        cin >> pilihanSearch;
-        cin.ignore(10000, '\n');
+        try {
+            clearScreen();
+            menuSearching();
+            cin >> pilihanSearch;
+            cin.ignore(10000, '\n');
 
-        if (pilihanSearch == '0') {
-            cout << merah << "\n[!] Anda Akan Keluar Dari Menu Ini" << putih << endl;
-            jeda();
-        } else if (pilihanSearch == '1') {
-            cariId();
-        } else if (pilihanSearch == '2') {
-            linearSearch();
-        } else {
-            cout << merah << "\n[!] Error: Pilihan Tidak Valid!" << putih << endl;
+            if (pilihanSearch == '0') {
+                cout << merah << "\n[!] Anda Akan Keluar Dari Menu Ini" << putih << endl;
+                jeda();
+            } else if (pilihanSearch == '1') {
+                cariId();
+            } else if (pilihanSearch == '2') {
+                linearSearch();
+            } else {
+                throw invalid_argument("Pilihan Searching Tidak Valid!");
+            }
+        } catch (const invalid_argument& e) {
+            cout << merah << "\n[!] Error: " << e.what() << putih << endl;
             jeda();
         }
 
@@ -455,55 +485,59 @@ void jalankanMenuSearching() {
 bool prosesRegistrasi(User *daftarAkun, int &jumlahAkun) {
     string pilihRole;
     while (true) {
-        bool cekUsername = false;
-        tampilRegistrasi();
-        
-        if (jumlahAkun == MAKS_USER) {
-            cout << merah << "\n[!] Error: Kapasitas Akun Pengguna Penuh" << putih << endl;
-            jeda();
-            return false;
-        } else {
-            cout << "\nMasukkan Username: ";
-            getline(cin, daftarAkun[jumlahAkun].username);
+        try {
+            bool cekUsername = false;
+            tampilRegistrasi();
+            
+            if (jumlahAkun == MAKS_USER) {
+                throw runtime_error("Kapasitas Akun Pengguna Penuh");
+            } else {
+                cout << "\nMasukkan Username: ";
+                getline(cin, daftarAkun[jumlahAkun].username);
 
-            for (int i = 0; i < jumlahAkun; i++) {
-                if (daftarAkun[jumlahAkun].username == daftarAkun[i].username) {
-                    cekUsername = true;
-                    break; 
+                for (int i = 0; i < jumlahAkun; i++) {
+                    if (daftarAkun[jumlahAkun].username == daftarAkun[i].username) {
+                        cekUsername = true;
+                        break; 
+                    }
+                }
+
+                if (cekUsername) {
+                    throw invalid_argument("Username Telah Dipakai!");
+                }
+
+                cout << "Masukkan Password: ";
+                cin >> daftarAkun[jumlahAkun].password;
+
+                cout << "Pilih Role (admin/user): ";
+                cin >> pilihRole;
+                cin.ignore(10000, '\n');
+
+                if (pilihRole == "admin" || pilihRole == "Admin" || pilihRole == "ADMIN") {
+                    daftarAkun[jumlahAkun].role = "admin";
+                    jumlahAkun++;
+                    cout << hijau << "\n[+] Akun Berhasil Dibuat! Silahkan Login!" << endl;
+                    cout << "[+] Role: Admin" << putih << endl;
+                    jeda();
+                    return true;
+                } else if (pilihRole == "user" || pilihRole == "User" || pilihRole == "USER") {
+                    daftarAkun[jumlahAkun].role = "user";
+                    jumlahAkun++;
+                    cout << hijau << "\n[+] Akun Berhasil Dibuat! Silahkan Login!" << endl;
+                    cout << "[+] Role: User" << putih << endl;
+                    jeda();
+                    return true;
+                } else {
+                    throw invalid_argument("Role Tidak Valid (Gunakan 'admin' atau 'user')!");
                 }
             }
-
-            if (cekUsername) {
-                cout << merah << "\n[!] Error: Username Telah Dipakai!" << putih << endl;
-                jeda();
-                continue;
-            }
-
-            cout << "Masukkan Password: ";
-            cin >> daftarAkun[jumlahAkun].password;
-
-            cout << "Pilih Role (admin/user): ";
-            cin >> pilihRole;
-            cin.ignore(10000, '\n');
-
-            if (pilihRole == "admin" || pilihRole == "Admin" || pilihRole == "ADMIN") {
-                daftarAkun[jumlahAkun].role = "admin";
-                jumlahAkun++;
-                cout << hijau << "\n[+] Akun Berhasil Dibuat! Silahkan Login!" << endl;
-                cout << "[+] Role: " << pilihRole << putih << endl;
-                jeda();
-                return true;
-            } else if (pilihRole == "user" || pilihRole == "User" || pilihRole == "USER") {
-                daftarAkun[jumlahAkun].role = "user";
-                jumlahAkun++;
-                cout << hijau << "\n[+] Akun Berhasil Dibuat! Silahkan Login!" << endl;
-                cout << "[+] Role: " << pilihRole << putih << endl;
-                jeda();
-                return true;
-            } else {
-                cout << merah << "\n[!] Error: Role Tidak Valid!" << putih << endl;
-                jeda();
-            }
+        } catch (const invalid_argument& e) {
+            cout << merah << "\n[!] Error Input: " << e.what() << putih << endl;
+            jeda();
+        } catch (const runtime_error& e) {
+            cout << merah << "\n[!] Error Sistem: " << e.what() << putih << endl;
+            jeda();
+            return false;
         }
     }
 }
@@ -600,7 +634,7 @@ int binarySearch(string target) {
 
         if (lukisan[mid].id == target) {
             return mid;
-        } else if (lukisan[mid].id > target) { // dibalik
+        } else if (lukisan[mid].id > target) {
             low = mid + 1;
         } else {
             high = mid - 1;
@@ -638,29 +672,33 @@ int linearSearch() {
 }
 
 void cariId() {
-    if (!isSortedById()) {
-        cout << merah << "\n[!] Error: Data Belum Terurut Berdasarkan ID!" << putih << endl;
+    try {
+        if (!isSortedById()) {
+            throw runtime_error("Data Belum Terurut Berdasarkan ID! Lakukan Sorting Terlebih Dahulu.");
+        }
+
+        string key;
+        cout << "Masukkan Id Lukisan Yang Ingin Dicari: ";
+        getline(cin, key);
+
+        int hasil = binarySearch(key);
+
+        if (hasil != -1) {
+            cout << hijau << "\n[+] Data Ditemukan!" << putih << endl;
+            cout << "ID      : " << lukisan[hasil].id << endl;
+            cout << "Judul   : " << lukisan[hasil].judul << endl;
+            cout << "Pelukis : " << lukisan[hasil].namaPelukis << endl;
+            cout << "Tahun   : " << lukisan[hasil].tahun << endl;
+            cout << "Status  : " << lukisan[hasil].status << endl;
+        } else {
+            cout << merah << "\n[-] Data Tidak Ditemukan!" << putih << endl;
+        }
         jeda();
-        return;
+
+    } catch (const runtime_error& e) {
+        cout << merah << "\n[!] Error Logika: " << e.what() << putih << endl;
+        jeda();
     }
-
-    string key;
-    cout << "Masukkan Id Lukisan Yang Ingin Dicari: ";
-    getline(cin, key);
-
-    int hasil = binarySearch(key);
-
-    if (hasil != -1) {
-        cout << hijau << "\n[+] Data Ditemukan!" << putih << endl;
-        cout << "ID      : " << lukisan[hasil].id << endl;
-        cout << "Judul   : " << lukisan[hasil].judul << endl;
-        cout << "Pelukis : " << lukisan[hasil].namaPelukis << endl;
-        cout << "Tahun   : " << lukisan[hasil].tahun << endl;
-        cout << "Status  : " << lukisan[hasil].status << endl;
-    } else {
-        cout << merah << "\n[-] Data Tidak Ditemukan!" << putih << endl;
-    }
-    jeda();
 }
 
 int main() {
@@ -681,38 +719,44 @@ int main() {
 
     char pilihan;
     do {
-        menuUtama();
-        cin >> pilihan;
-        cin.ignore(10000, '\n');
+        try {
+            menuUtama();
+            cin >> pilihan;
+            cin.ignore(10000, '\n');
 
-        if (pilihan == '1') {
-            if (jumlahAkun == 0) {
-                cout << merah << "\n[!] Error: Belum Ada Akun Yang Terdaftar!" << putih << endl;
-                jeda();
-                continue;
-            }
-
-            string cekRole = "";
-            if (prosesLogin(cekRole, daftarAkun, jumlahAkun)) {
-                if (cekRole == "admin") {
-                    jalankanMenuAdmin(lukisan, jumlahData);
-                } else if (cekRole == "user") {
-                    jalankanMenuUser(lukisan, jumlahData);
+            if (pilihan == '1') {
+                if (jumlahAkun == 0) {
+                    throw runtime_error("Belum Ada Akun Yang Terdaftar!");
                 }
-            } else {
+
+                string cekRole = "";
+                if (prosesLogin(cekRole, daftarAkun, jumlahAkun)) {
+                    if (cekRole == "admin") {
+                        jalankanMenuAdmin(lukisan, jumlahData);
+                    } else if (cekRole == "user") {
+                        jalankanMenuUser(lukisan, jumlahData);
+                    }
+                } else {
+                    return 0;
+                }
+
+            } else if (pilihan == '2') {
+                prosesRegistrasi(daftarAkun, jumlahAkun);
+
+            } else if (pilihan == '3') {
+                cout << merah << "\n[-] Anda Keluar Dari Program." << putih << endl;
+                cout << endl;
                 return 0;
+
+            } else {
+                throw invalid_argument("Pilihan Menu Utama Tidak Valid!");
             }
 
-        } else if (pilihan == '2') {
-            prosesRegistrasi(daftarAkun, jumlahAkun);
-
-        } else if (pilihan == '3') {
-            cout << merah << "\n[-] Anda Keluar Dari Program." << putih << endl;
-            cout << endl;
-            return 0;
-
-        } else {
-            cout << merah << "\n[!] Error: Pilihan Tidak Valid!" << putih << endl;
+        } catch (const invalid_argument& e) {
+            cout << merah << "\n[!] Error: " << e.what() << putih << endl;
+            jeda();
+        } catch (const runtime_error& e) {
+            cout << merah << "\n[!] Error Sistem: " << e.what() << putih << endl;
             jeda();
         }
 
